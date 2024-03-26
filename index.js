@@ -22,6 +22,7 @@ class Sprite {
     };
     this.color = color;
     this.isAttacking = false;
+    this.health = 100;
   }
 
   draw() {
@@ -146,8 +147,9 @@ function animate() {
       rectangle2: enemy}) &&
     player.isAttacking
   ) {
-    console.log("you hit the enemy");
     player.isAttacking = false;
+    enemy.health -= 20;
+    document.querySelector('#enemyHealth').style.width = enemy.health + '%'
   }
   // hitDetector
   if (
