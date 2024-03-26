@@ -151,7 +151,7 @@ function animate() {
     enemy.health -= 20;
     document.querySelector('#enemyHealth').style.width = enemy.health + '%'
   }
-  // hitDetector
+  //enemy hitDetector
   if (
     rectangularCollision({
       rectangle1: enemy, 
@@ -160,6 +160,8 @@ function animate() {
   ) {
     console.log("enemy hit you");
    enemy.isAttacking = false;
+   player.health -= 20;
+   document.querySelector('#playerHealth').style.width = player.health + '%'
   }
 }
 animate();
