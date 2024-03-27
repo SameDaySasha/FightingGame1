@@ -37,13 +37,13 @@ class Sprite {
         this.attackBox.position.y,
         this.attackBox.width,
         this.attackBox.height
-      ); 
+      );
     }
   }
   update() {
     this.draw();
     this.attackBox.position.x = this.position.x + this.attackBox.offset.x;
-    this.attackBox.position.y = this.position.y 
+    this.attackBox.position.y = this.position.y;
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
@@ -83,7 +83,7 @@ const enemy = new Sprite({
     y: 0,
   },
   color: "blue",
-  offset: { x: -50, y: 0 }
+  offset: { x: -50, y: 0 },
 });
 
 console.log(player);
@@ -107,37 +107,42 @@ const keys = {
     pressed: false,
   },
 };
-let lastKey; 
+let lastKey;
 
-function rectangularCollision({
-  rectangle1,
-  rectangle2
-}) {
-  return( 
-   rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x &&
-   rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width &&
-   rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y &&
-   rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
+function rectangularCollision({ rectangle1, rectangle2 }) {
+  return (
+    rectangle1.attackBox.position.x + rectangle1.attackBox.width >=
+      rectangle2.position.x &&
+    rectangle1.attackBox.position.x <=
+      rectangle2.position.x + rectangle2.width &&
+    rectangle1.attackBox.position.y + rectangle1.attackBox.height >=
+      rectangle2.position.y &&
+    rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height
+  );
 }
-let timer = 5;
-function decreaseTimer(){
-  if(timer>0){
-  setTimeout(decreaseTimer, 1000)
-  timer--
-  document.querySelector('#timer').innerHTML = timer
+function determineWinner({player, enemy, timerId}){
+  clearTimeout(timerId)
+  document.querySelector("#displayText").style.display = "flex";
+  if (player.health === enemy.health) {
+    document.querySelector("#displayText").innerHTML = "It's a tie";
+  } else if (player.health > enemy.health) {
+    document.querySelector("#displayText").innerHTML = "Player 1 Wins";
+  } else if (player.health < enemy.health) {
+    document.querySelector("#displayText").innerHTML = "Player 2 Wins";
+  }
 }
-if(timer === 0){
-  document.querySelector('#displayText').style.display='flex' 
- if(player.health === enemy.health){
-  document.querySelector('#displayText').innerHTML = "It's a tie"
-  
- }}else if(player.health > enemy.health){
-  document.querySelector('#displayText').innerHTML = "Player 1 Wins"
-  
-} else if(player.health < enemy.health){ 
-  document.querySelector('#displayText').innerHTML = "Player 2 Wins"
+let timer = 60;
+let timerId
+function decreaseTimer() {
+  if (timer > 0) {
+   timerId = setTimeout(decreaseTimer, 1000);
+    timer--;
+    document.querySelector("#timer").innerHTML = timer;
   }
 
+  if (timer === 0) {
+    determineWinner({player, enemy, timerId});
+  }
 }
 
 decreaseTimer();
@@ -166,25 +171,31 @@ function animate() {
   // hitDetector
   if (
     rectangularCollision({
-      rectangle1: player, 
-      rectangle2: enemy}) &&
+      rectangle1: player,
+      rectangle2: enemy,
+    }) &&
     player.isAttacking
   ) {
     player.isAttacking = false;
     enemy.health -= 20;
-    document.querySelector('#enemyHealth').style.width = enemy.health + '%'
+    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
   //enemy hitDetector
   if (
     rectangularCollision({
-      rectangle1: enemy, 
-      rectangle2: player}) &&
-   enemy.isAttacking
+      rectangle1: enemy,
+      rectangle2: player,
+    }) &&
+    enemy.isAttacking
   ) {
     console.log("enemy hit you");
-   enemy.isAttacking = false;
-   player.health -= 20;
-   document.querySelector('#playerHealth').style.width = player.health + '%'
+    enemy.isAttacking = false;
+    player.health -= 20;
+    document.querySelector("#playerHealth").style.width = player.health + "%";
+  }
+  // end game based on health
+  if(enemy.health <= 0 || player.health <= 0){
+   determineWinner({player, enemy,timerId});
   }
 }
 animate();
@@ -219,9 +230,9 @@ window.addEventListener("keydown", (event) => {
       enemy.velocity.y = -20;
       break;
     case "ArrowDown":
-    enemy.attack()
+      enemy.attack();
       break;
-  } 
+  }
   console.log(event.key);
 });
 
