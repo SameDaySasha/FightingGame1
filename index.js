@@ -119,15 +119,27 @@ function rectangularCollision({
    rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y &&
    rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
 }
-let timer = 10;
+let timer = 5;
 function decreaseTimer(){
+  if(timer>0){
   setTimeout(decreaseTimer, 1000)
-if(timer>0){
   timer--
   document.querySelector('#timer').innerHTML = timer
 }
+if(timer === 0){
+  document.querySelector('#displayText').style.display='flex' 
+ if(player.health === enemy.health){
+  document.querySelector('#displayText').innerHTML = "It's a tie"
   
+ }}else if(player.health > enemy.health){
+  document.querySelector('#displayText').innerHTML = "Player 1 Wins"
+  
+} else if(player.health < enemy.health){ 
+  document.querySelector('#displayText').innerHTML = "Player 2 Wins"
+  }
+
 }
+
 decreaseTimer();
 
 function animate() {
