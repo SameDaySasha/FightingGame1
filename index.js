@@ -57,11 +57,16 @@ const player = new Fighter({
     },
     fall: { imageSrc: "./img/samuraiMack/Fall.png", framesMax: 2 },
   },
+  attackBox: {
+    offset: { x:-45, y: 0 },
+    width: 100,
+    height: 50,
+  },
 });
 
 const enemy = new Fighter({
   position: {
-    x: 400,
+    x: 800,
     y: 100,
   },
 
@@ -70,11 +75,11 @@ const enemy = new Fighter({
     y: 0,
   },
   color: "blue",
-  offset: { x: -50, y: 0 },
+  offset: { x: 0, y: 0 },
   imageSrc: "./img/kenji/Idle.png",
   framesMax: 4,
   scale: 2.2,
-  offset: { x: -300, y: 130 },
+  offset: { x: 74, y: 130 },
   sprites: {
     idle: {
       imageSrc: "./img/kenji/Idle.png",
@@ -93,6 +98,11 @@ const enemy = new Fighter({
       framesMax: 2,
     },
     fall: { imageSrc: "./img/kenji/Fall.png", framesMax: 2 },
+  },
+  attackBox: {
+    offset: { x: 0, y: 0 },
+    width: 100,
+    height: 50,
   },
 });
 
