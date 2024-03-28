@@ -6,17 +6,16 @@ canvas.height = 576;
 c.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.7;
 
-
 const background = new Sprite({
   position: {
     x: 0,
     y: 0,
   },
   imageSrc: "./img/background.png",
-})
+});
 
 const shop = new Sprite({
-  position:{
+  position: {
     x: 600,
     y: 129,
   },
@@ -33,27 +32,30 @@ const player = new Fighter({
 
   velocity: {
     x: 0,
-    y: 0, 
+    y: 0,
   },
   imageSrc: "./img/samuraiMack/Idle.png",
   framesMax: 8,
   scale: 2.2,
   offset: { x: 190, y: 120 },
-  sprites:{
-    idle:{
+  sprites: {
+    idle: {
       imageSrc: "./img/samuraiMack/Idle.png",
       framesMax: 8,
     },
-    attack:{
+    attack: {
       imageSrc: "./img/samuraiMack/Attack.png",
       framesMax: 8,
     },
-    run:{
+    run: {
       imageSrc: "./img/samuraiMack/Run.png",
       framesMax: 8,
     },
-  
-  }
+    jump: {
+      imageSrc: "./img/samuraiMack/Jump.png",
+      framesMax: 2,
+    },
+  },
 });
 
 const enemy = new Fighter({
@@ -93,7 +95,6 @@ const keys = {
 };
 let lastKey;
 
-
 decreaseTimer();
 
 function animate() {
@@ -101,17 +102,27 @@ function animate() {
   c.fillStyle = "black";
   c.fillRect(0, 0, canvas.width, canvas.height);
   background.update();
-  shop.update()
+  shop.update();
   player.update();
   // enemy.update();
   player.velocity.x = 0;
   enemy.velocity.x = 0;
+
+  // movement keys 
+
+
   if (keys.a.pressed && player.lastKey === "a") {
     player.velocity.x = -5;
+    player.switchSprite('run')
   } else if (keys.d.pressed && player.lastKey === "d") {
     player.velocity.x = 5;
+    player.switchSprite('run')
+  }else{
+     player.switchSprite('idle')
   }
-
+if (player.velocity.y < 0){
+  player.switchSprite('jump')
+}
   // enemy keys
   if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
     enemy.velocity.x = -5;
@@ -145,8 +156,8 @@ function animate() {
     document.querySelector("#playerHealth").style.width = player.health + "%";
   }
   // end game based on health
-  if(enemy.health <= 0 || player.health <= 0){
-   determineWinner({player, enemy,timerId});
+  if (enemy.health <= 0 || player.health <= 0) {
+    determineWinner({ player, enemy, timerId });
   }
 }
 animate();
