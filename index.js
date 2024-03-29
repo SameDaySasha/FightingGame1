@@ -206,7 +206,10 @@ function animate() {
   ) {
     enemy.takeHit();
     player.isAttacking = false;
-    document.querySelector("#enemyHealth").style.width = enemy.health + "%";
+    gsap.to("#enemyHealth",{
+      width: enemy.health + "%",
+      duration: 0.5
+    })
   }
 
   // if player misses
@@ -224,8 +227,11 @@ function animate() {
     enemy.framesCurrent === 2
   ) {
     player.takeHit();
-    enemy.isAttacking = false;
-    document.querySelector("#playerHealth").style.width = player.health + "%";
+    player.isAttacking = false;
+    gsap.to("#playerHealth",{
+      width: player.health + "%",
+      duration: 0.5
+    })
   }
   // end game based on health
   if (enemy.health <= 0 || player.health <= 0) {
