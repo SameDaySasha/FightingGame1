@@ -56,12 +56,17 @@ const player = new Fighter({
       framesMax: 2,
     },
     fall: { imageSrc: "./img/samuraiMack/Fall.png", framesMax: 2 },
+    takeHit: {
+    imageSrc: "./img/samuraiMack/Take Hit - white silhouette.png", // Replace with the correct file path
+    framesMax: 4, // Adjust the framesMax value as needed
+  },
   },
   attackBox: {
     offset: { x:-45, y: 0 },
     width: 100,
     height: 50,
   },
+  
 });
 
 const enemy = new Fighter({
@@ -98,12 +103,17 @@ const enemy = new Fighter({
       framesMax: 2,
     },
     fall: { imageSrc: "./img/kenji/Fall.png", framesMax: 2 },
+    takeHit:{
+    imageSrc: "./img/kenji/Take hit.png",
+    framesMax:3,
+  }
   },
   attackBox: {
     offset: { x: 0, y: 0 },
     width: 100,
     height: 50,
   },
+  
 });
 
 console.log(player);
@@ -182,30 +192,40 @@ function animate() {
       rectangle1: player,
       rectangle2: enemy,
     }) &&
-    player.isAttacking
+    player.isAttacking && player.framesCurrent === 4
   ) {
+    enemy.takeHit();
     player.isAttacking = false;
-    enemy.health -= 20;
     document.querySelector("#enemyHealth").style.width = enemy.health + "%";
   }
+
+  // if player misses
+ if (player.isAttacking && player.framesCurrent === 4) {
+    player.isAttacking = false;
+ }
+
   //enemy hitDetector
   if (
     rectangularCollision({
       rectangle1: enemy,
       rectangle2: player,
     }) &&
-    enemy.isAttacking
+    enemy.isAttacking && enemy.framesCurrent === 2
   ) {
-    console.log("enemy hit you");
+    player.takeHit();
     enemy.isAttacking = false;
-    player.health -= 20;
     document.querySelector("#playerHealth").style.width = player.health + "%";
   }
   // end game based on health
   if (enemy.health <= 0 || player.health <= 0) {
     determineWinner({ player, enemy, timerId });
   }
+  if (enemy.isAttacking && enemy.framesCurrent === 2) {
+  enemy.isAttacking = false;
 }
+}
+
+
 animate();
 
 window.addEventListener("keydown", (event) => {
