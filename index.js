@@ -57,16 +57,20 @@ const player = new Fighter({
     },
     fall: { imageSrc: "./img/samuraiMack/Fall.png", framesMax: 2 },
     takeHit: {
-    imageSrc: "./img/samuraiMack/Take Hit - white silhouette.png", // Replace with the correct file path
-    framesMax: 4, // Adjust the framesMax value as needed
-  },
+      imageSrc: "./img/samuraiMack/Take Hit - white silhouette.png", // Replace with the correct file path
+      framesMax: 4, // Adjust the framesMax value as needed
+    },
+    
+    death: {
+      imageSrc: "./img/samuraiMack/Death.png",
+      framesMax: 6,
+    },
   },
   attackBox: {
-    offset: { x:-45, y: 0 },
+    offset: { x: -45, y: 0 },
     width: 100,
     height: 50,
   },
-  
 });
 
 const enemy = new Fighter({
@@ -103,17 +107,22 @@ const enemy = new Fighter({
       framesMax: 2,
     },
     fall: { imageSrc: "./img/kenji/Fall.png", framesMax: 2 },
-    takeHit:{
-    imageSrc: "./img/kenji/Take hit.png",
-    framesMax:3,
-  }
+
+    takeHit: {
+      imageSrc: "./img/kenji/Take hit.png",
+      framesMax: 3,
+    },
+    death: {
+      imageSrc: "./img/kenji/Death.png",
+      framesMax: 7,
+    },
+    
   },
   attackBox: {
     offset: { x: 0, y: 0 },
     width: 100,
     height: 50,
   },
-  
 });
 
 console.log(player);
@@ -192,7 +201,8 @@ function animate() {
       rectangle1: player,
       rectangle2: enemy,
     }) &&
-    player.isAttacking && player.framesCurrent === 4
+    player.isAttacking &&
+    player.framesCurrent === 4
   ) {
     enemy.takeHit();
     player.isAttacking = false;
@@ -200,9 +210,9 @@ function animate() {
   }
 
   // if player misses
- if (player.isAttacking && player.framesCurrent === 4) {
+  if (player.isAttacking && player.framesCurrent === 4) {
     player.isAttacking = false;
- }
+  }
 
   //enemy hitDetector
   if (
@@ -210,7 +220,8 @@ function animate() {
       rectangle1: enemy,
       rectangle2: player,
     }) &&
-    enemy.isAttacking && enemy.framesCurrent === 2
+    enemy.isAttacking &&
+    enemy.framesCurrent === 2
   ) {
     player.takeHit();
     enemy.isAttacking = false;
@@ -221,10 +232,9 @@ function animate() {
     determineWinner({ player, enemy, timerId });
   }
   if (enemy.isAttacking && enemy.framesCurrent === 2) {
-  enemy.isAttacking = false;
+    enemy.isAttacking = false;
+  }
 }
-}
-
 
 animate();
 
