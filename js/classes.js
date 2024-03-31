@@ -46,6 +46,10 @@ class Sprite {
     this.animateFrames();
   }
 }
+function rollDamage() {
+  // Roll a d8 (1-8) and add 6
+  return Math.floor(Math.random() * 8) + 1 + 6;
+}
 
 class Fighter extends Sprite {
   constructor({
@@ -116,11 +120,21 @@ class Fighter extends Sprite {
     this.switchSprite("attack1");
     this.isAttacking = true;
   }
+
   takeHit() {
-    this.health -= 20;
-    if (this.health <= 0) {
+
+    
+    // Calculate damage using the dice roller
+    const damage = rollDamage();
+    this.health -= damage;
+    
+    if (this.health <= 1) {
       this.switchSprite("death");
-    } else this.switchSprite("takeHit");
+      // Ensure that the 'dead' flag is correctly set here if not handled in switchSprite
+      this.dead = true;
+    } else {
+      this.switchSprite("takeHit");
+    }
   }
  
 

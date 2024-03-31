@@ -165,7 +165,7 @@ function enemyAI() {
   const distance = getDistance(player.position.x, player.position.y, enemy.position.x, enemy.position.y);
 
   // Current time in milliseconds
-  if (distance < 150 && !enemy.hasAttacked) {
+  if (distance < 130 && !enemy.hasAttacked) {
     enemy.attack();
     enemy.hasAttacked = true;
 
