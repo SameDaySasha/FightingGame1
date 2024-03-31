@@ -74,6 +74,7 @@ const player = new Fighter({
 });
 
 const enemy = new Fighter({
+  hasAttacked: false,
   position: {
     x: 800,
     y: 100,
@@ -150,6 +151,49 @@ let lastKey;
 
 decreaseTimer();
 
+function getDistance(x1, y1, x2, y2) {
+  let xDistance = x2 - x1;
+  let yDistance = y2 - y1;
+  return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+}
+
+// Simple AI for enemy
+function enemyAI() {
+    if (enemy.dead || player.dead) {
+        return; // Stops AI actions if either character is dead
+    }
+  const distance = getDistance(player.position.x, player.position.y, enemy.position.x, enemy.position.y);
+
+  // Current time in milliseconds
+  if (distance < 150 && !enemy.hasAttacked) {
+    enemy.attack();
+    enemy.hasAttacked = true;
+
+    // Reset hasAttacked back to false after 1000ms cooldown
+    setTimeout(() => {
+      enemy.hasAttacked = false;
+    }, 1000);
+  }
+  
+  // Basic movement towards or away from the player
+  if (player.position.x < enemy.position.x - 100) {
+    enemy.velocity.x = -5; // Move left
+    enemy.switchSprite("run");
+  } else if (player.position.x > enemy.position.x + 100) {
+    enemy.velocity.x = 5; // Move right
+    enemy.switchSprite("run");
+  } else {
+    enemy.velocity.x = 0; // Stop moving
+    enemy.switchSprite("idle");
+  }
+
+  // Simple jumping logic
+  if (distance < 100 && Math.random() < 0.1) {
+    enemy.velocity.y = -10; // Jump
+  }
+}
+
+
 function animate() {
   window.requestAnimationFrame(animate);
   c.fillStyle = "black";
@@ -159,8 +203,8 @@ function animate() {
   player.update();
   enemy.update();
   player.velocity.x = 0;
-  enemy.velocity.x = 0;
-
+  // enemy.velocity.x = 0;
+  enemyAI();
   // movement keys
 
   if (keys.a.pressed && player.lastKey === "a") {
