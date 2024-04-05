@@ -203,8 +203,8 @@ function animate() {
   player.update();
   enemy.update();
   player.velocity.x = 0;
-  // enemy.velocity.x = 0;
-  enemyAI();
+  enemy.velocity.x = 0;
+  // enemyAI();
   // movement keys
 
   if (keys.a.pressed && player.lastKey === "a") {
